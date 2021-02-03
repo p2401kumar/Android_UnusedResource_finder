@@ -1,9 +1,3 @@
-if [ -z $1 ]
-  then
-    echo "Error: Provide Project Absolute path as parameter" >&2
-    exit 0
-fi
-
 # Initialization
 PROJECT_ROOT=$1
 MAIN_RES_PATH="app/src/main/res/"
@@ -46,7 +40,3 @@ for dir in $FOLDERS; do
 done
 
 echo $RES_LIST
-
-
-
-#echo $PROJECT_ROOT

@@ -1,1 +1,1 @@
-sudo apt-get install -y xmlstarlet
+sudo apt-get install -y xmlstarlet pcregrep
