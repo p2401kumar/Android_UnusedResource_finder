@@ -8,6 +8,7 @@ PROJECT_ROOT=$1
 RES_USAGE_PATH="app/src/main/res"
 
 USAGE_LIST_FILE_NAME="XML_usages_list.pk"
+USAGE_TSORT_COMBINED=$2
 
 #layout 
 LAYOUT_FILES=`find "$PROJECT_ROOT$RES_USAGE_PATH" -type f -name "*.xml" | grep -E 'res/layout|res/drawable'`
@@ -17,30 +18,37 @@ for file in $LAYOUT_FILES; do
 	#echo $T_FILENAME
 
 	LX_USAGE=""
+	LX_NAME=""
 	if [ `echo $file | grep '/drawable' -c` -gt 0 ]; then
 		LX_USAGE="@drawable/$T_FILENAME#"
+		LX_NAME="@drawable/$T_FILENAME"
 	else
 		LX_USAGE="@layout/$T_FILENAME#"
+		LX_NAME="@layout/$T_FILENAME"
 	fi
 
 	KL_LAYOUT_USAGE=`pcregrep -Mou "@layout/[a-z_0-9]*" $file`
 	for lx in $KL_LAYOUT_USAGE; do
 		LX_USAGE="$LX_USAGE$lx "
+		echo "$LX_NAME $lx" >> $USAGE_TSORT_COMBINED
 	done
 
 	KL_DRAWABLE_USAGE=`pcregrep -Mou "@drawable/[a-z_0-9]*" $file`
 	for lx in $KL_DRAWABLE_USAGE; do
 		LX_USAGE="$LX_USAGE$lx "
+		echo "$LX_NAME $lx" >> $USAGE_TSORT_COMBINED
 	done
 	
 	KL_STRING_USAGE=`pcregrep -Mou "@string/[a-z_0-9]*" $file`
 	for lx in $KL_STRING_USAGE; do
 		LX_USAGE="$LX_USAGE$lx "
+		echo "$LX_NAME $lx" >> $USAGE_TSORT_COMBINED
 	done
 	
 	KL_COLOR_USAGE=`pcregrep -Mou "@color/[a-z_0-9]*" $file`
 	for lx in $KL_COLOR_USAGE; do
 		LX_USAGE="$LX_USAGE$lx "
+		echo "$LX_NAME $lx" >> $USAGE_TSORT_COMBINED
 	done
 	
 	echo $LX_USAGE >> $USAGE_LIST_FILE_NAME
